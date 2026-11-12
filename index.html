@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pengumpulan Final Project - Ekskul Canicomp</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts untuk nuansa 8-Bit Retro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --pixel-border: #1a1c2c;
+            --pixel-light: #ffffff;
+            --pixel-shadow: #5d275d;
+            --gold: #ffcd75;
+            --grass: #38b764;
+            --sky: #41a6f6;
+            --brick: #b13e53;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'VT323', monospace;
+            background-color: #1a1c2c;
+            color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-size: 1.25rem;
+        }
+
+        .font-pixel {
+            font-family: 'Press Start 2P', cursive;
+            line-height: 1.5;
+        }
+
+        .font-vt {
+            font-family: 'VT323', monospace;
+        }
+
+        /* Gaya Kotak Pixel 8-Bit */
+        .pixel-box {
+            background-color: #29366f;
+            border: 4px solid #1a1c2c;
+            box-shadow: 
+                inset 4px 4px 0px #3b5dc9,
+                inset -4px -4px 0px #1a1c2c,
+                0px 6px 0px #1a1c2c;
+            border-radius: 4px;
+        }
+
+        .pixel-box-light {
+            background-color: #f4f4f4;
+            color: #1a1c2c;
+            border: 4px solid #1a1c2c;
+            box-shadow: 
+                inset 4px 4px 0px #ffffff,
+                inset -4px -4px 0px #94b0c2,
+                0px 8px 0px rgba(26, 28, 44, 0.85);
+            border-radius: 4px;
+        }
+
+        .pixel-box-gold {
+            background-color: #ffcd75;
+            color: #1a1c2c;
+            border: 4px solid #1a1c2c;
+            box-shadow: 
+                inset 4px 4px 0px #fff3b0,
+                inset -4px -4px 0px #ef7d57,
+                0px 6px 0px #1a1c2c;
+            border-radius: 4px;
+        }
+
+        /* Tombol Pixel 8-Bit */
+        .pixel-btn {
+            font-family: 'Press Start 2P', cursive;
+            border: 4px solid #1a1c2c;
+            box-shadow: 
+                inset 3px 3px 0px rgba(255, 255, 255, 0.4),
+                inset -3px -3px 0px rgba(0, 0, 0, 0.4),
+                0px 4px 0px #1a1c2c;
+            transition: transform 0.08s ease, box-shadow 0.08s ease;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .pixel-btn:active {
+            transform: translateY(4px);
+            box-shadow: 
+                inset 2px 2px 0px rgba(0, 0, 0, 0.4),
+                0px 0px 0px #1a1c2c;
+        }
+
+        /* Input Form Pixel */
+        .pixel-input {
+            background-color: #ffffff;
+            color: #1a1c2c;
+            border: 4px solid #1a1c2c;
+            box-shadow: inset 3px 3px 0px #94b0c2;
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            outline: none;
+            user-select: text;
+        }
+
+        .pixel-input:focus {
+            background-color: #fffbe6;
+            border-color: #3b5dc9;
+        }
+
+        /* Canvas Game */
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        /* Animasi Melompat Heboh pada Halaman Sukses */
+        @keyframes pixelJump {
+            0%, 100% { transform: translateY(0) scale(1); }
+            25% { transform: translateY(-22px) scale(1.06, 0.95); }
+            50% { transform: translateY(0) scale(0.95, 1.05); }
+            75% { transform: translateY(-12px) scale(1.03); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px #ffcd75); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 20px #ef7d57); }
+        }
+
+        @keyframes rainbowBorder {
+            0% { border-color: #ff004d; }
+            25% { border-color: #ffcd75; }
+            50% { border-color: #38b764; }
+            75% { border-color: #41a6f6; }
+            100% { border-color: #ff004d; }
+        }
+
+        .animate-pixel-jump {
+            animation: pixelJump 0.9s infinite ease-in-out;
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 1.5s infinite ease-in-out;
+        }
+
+        .rainbow-frame {
+            animation: rainbowBorder 2s infinite linear;
+        }
+
+        /* Scrollbar Retro */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1c2c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #566c86;
+            border: 2px solid #1a1c2c;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-[#1a1c2c]">
+
+    <!-- HEADER / TOP HUD BAR -->
+    <header class="w-full bg-[#29366f] border-b-4 border-[#1a1c2c] px-3 py-2.5 z-30 shadow-lg">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <!-- Judul Quest -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 bg-[#ffcd75] border-2 border-[#1a1c2c] flex items-center justify-center text-[#1a1c2c] font-pixel text-sm shadow-inner">
+                    ★
+                </div>
+                <div>
+                    <h1 class="font-pixel text-xs sm:text-sm md:text-base text-[#ffcd75] tracking-wider">
+                        PENGUMPULAN FINAL PROJECT
+                    </h1>
+                    <p class="font-vt text-base sm:text-lg text-[#a7f070] leading-none mt-0.5">
+                        EKSKUL CANICOMP
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tombol Kontrol HUD (Suara, Rekap Spreadsheet, Pengaturan Guru) -->
+            <div class="flex items-center gap-2">
+                <button id="btnToggleSound" onclick="toggleAudio()" class="pixel-btn bg-[#38b764] text-white text-[10px] sm:text-xs px-2.5 py-2 flex items-center gap-1.5" title="Suara 8-Bit">
+                    <span id="soundIcon">🔊</span>
+                    <span class="hidden sm:inline">SFX: ON</span>
+                </button>
+
+                <button onclick="openSpreadsheetModal()" class="pixel-btn bg-[#41a6f6] text-[#1a1c2c] text-[10px] sm:text-xs px-2.5 py-2 flex items-center gap-1.5">
+                    <span>📊</span>
+                    <span>REKAP (<span id="badgeCount">0</span>)</span>
+                </button>
+
+                <button onclick="openTeacherModal()" class="pixel-btn bg-[#566c86] text-white text-[10px] sm:text-xs px-2.5 py-2" title="Pengaturan Guru & Google Sheets">
+                    ⚙️
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- AREA UTAMA (GAME WORLD / FORM / CELEBRATION) -->
+    <main class="relative flex-1 w-full flex flex-col items-center justify-center overflow-hidden">
+
+        <!-- ========================================================= -->
+        <!-- TAHAP 1: DUNIA GAME 8-BIT (SISWA MENUJU GEDUNG SEKOLAH)    -->
+        <!-- ========================================================= -->
+        <section id="stageGame" class="relative w-full h-[calc(100vh-68px)] min-h-[500px] flex flex-col">
+            <!-- Banner Misi di Atas Canvas -->
+            <div class="absolute top-3 left-1/2 -translate-x-1/2 z-20 w-[94%] max-w-2xl pointer-events-none">
+                <div class="pixel-box px-4 py-2.5 text-center bg-[#1a1c2c]/90">
+                    <p class="font-pixel text-[10px] sm:text-xs text-[#ffcd75] animate-pulse">
+                        📜 MISI: BAWA SISWA MASUK KE PINTU SEKOLAH!
+                    </p>
+                    <p class="font-vt text-lg sm:text-xl text-white mt-0.5">
+                        Gunakan tombol <span class="text-[#a7f070] font-bold">PANAH / WASD</span> atau klik langsung pintu sekolah untuk mengumpulkan tugas.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Canvas Dunia 8-Bit -->
+            <div class="relative flex-1 w-full h-full">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+
+            <!-- Kontrol Sentuh Mobile (D-Pad & Tombol Masuk Cepat) -->
+            <div class="absolute bottom-4 left-4 right-4 z-20 flex items-end justify-between pointer-events-none">
+                <!-- D-Pad untuk HP/Tablet -->
+                <div class="pointer-events-auto grid grid-cols-3 gap-1.5 w-36 h-36 sm:w-40 sm:h-40 opacity-90">
+                    <div></div>
+                    <button id="btnUp" class="pixel-btn bg-[#29366f] text-white text-lg flex items-center justify-center active:bg-[#41a6f6]">▲</button>
+                    <div></div>
+                    <button id="btnLeft" class="pixel-btn bg-[#29366f] text-white text-lg flex items-center justify-center active:bg-[#41a6f6]">◀</button>
+                    <div class="bg-[#1a1c2c]/60 border-2 border-[#566c86] rounded flex items-center justify-center text-xs text-[#94b0c2]">MOVE</div>
+                    <button id="btnRight" class="pixel-btn bg-[#29366f] text-white text-lg flex items-center justify-center active:bg-[#41a6f6]">▶</button>
+                    <div></div>
+                    <button id="btnDown" class="pixel-btn bg-[#29366f] text-white text-lg flex items-center justify-center active:bg-[#41a6f6]">▼</button>
+                    <div></div>
+                </div>
+
+                <!-- Tombol Aksi Cepat -->
+                <div class="pointer-events-auto flex flex-col items-end gap-2">
+                    <button onclick="enterSchoolDoor()" class="pixel-btn bg-[#ffcd75] text-[#1a1c2c] text-[10px] sm:text-xs px-3 py-3 flex items-center gap-2">
+                        <span>🚪</span>
+                        <span>MASUK PINTU SEKOLAH</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAHAP 2: FORM PENGUMPULAN TUGAS (SAAT DI DEPAN PINTU)     -->
+        <!-- ========================================================= -->
+        <section id="stageForm" class="hidden w-full max-w-2xl mx-auto px-3 py-6 z-20">
+            <div class="pixel-box-light p-4 sm:p-6">
+                <!-- Header Form -->
+                <div class="flex items-center justify-between border-b-4 border-[#1a1c2c] pb-3 mb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🏫</span>
+                        <div>
+                            <h2 class="font-pixel text-xs sm:text-base text-[#b13e53]">
+                                LOKET PENGUMPULAN PROJECT
+                            </h2>
+                            <p class="font-vt text-lg text-[#333c57]">
+                                Kamu sudah sampai di depan pintu ruang guru! Lengkapi datamu.
+                            </p>
+                        </div>
+                    </div>
+                    <button onclick="backToGame()" class="pixel-btn bg-[#566c86] text-white text-[10px] px-2.5 py-2" title="Kembali ke Halaman Sekolah">
+                        ← KELUAR
+                    </button>
+                </div>
+
+                <!-- Pesan Error Validasi -->
+                <div id="formAlert" class="hidden mb-4 p-3 bg-[#ff004d] text-white border-4 border-[#1a1c2c] font-vt text-xl">
+                    ⚠️ <span id="formAlertText">Terjadi kesalahan!</span>
+                </div>
+
+                <!-- Form Input -->
+                <form id="projectForm" onsubmit="handleProjectSubmit(event)" class="space-y-4">
+                    <!-- Nama Lengkap -->
+                    <div>
+                        <label class="block font-pixel text-[10px] sm:text-xs text-[#1a1c2c] mb-1.5">
+                            1. NAMA LENGKAP SISWA *
+                        </label>
+                        <input type="text" id="studentName" required placeholder="Contoh: Budi Santoso" class="pixel-input">
+                    </div>
+
+                    <!-- Pilihan Kelas Tunggal (7-1 s/d 9-6) -->
+                    <div>
+                        <label class="block font-pixel text-[10px] sm:text-xs text-[#1a1c2c] mb-1.5">
+                            2. PILIH KELAS (7-1 S/D 9-6) *
+                        </label>
+                        <select id="studentGrade" onchange="updateFileRequirement()" required class="pixel-input cursor-pointer">
+                            <option value="">-- Pilih Kelas --</option>
+                            <optgroup label="Kelas 7 (Web HTML & CSS)">
+                                <option value="7-1">7-1</option>
+                                <option value="7-2">7-2</option>
+                                <option value="7-3">7-3</option>
+                                <option value="7-4">7-4</option>
+                                <option value="7-5">7-5</option>
+                                <option value="7-6">7-6</option>
+                            </optgroup>
+                            <optgroup label="Kelas 8 (App Inventor .aia)">
+                                <option value="8-1">8-1</option>
+                                <option value="8-2">8-2</option>
+                                <option value="8-3">8-3</option>
+                                <option value="8-4">8-4</option>
+                                <option value="8-5">8-5</option>
+                                <option value="8-6">8-6</option>
+                            </optgroup>
+                            <optgroup label="Kelas 9 (App Inventor .aia)">
+                                <option value="9-1">9-1</option>
+                                <option value="9-2">9-2</option>
+                                <option value="9-3">9-3</option>
+                                <option value="9-4">9-4</option>
+                                <option value="9-5">9-5</option>
+                                <option value="9-6">9-6</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Kotak Info Syarat File Dinamis -->
+                    <div id="requirementBox" class="p-3 bg-[#29366f] text-white border-4 border-[#1a1c2c]">
+                        <p class="font-pixel text-[10px] text-[#ffcd75] mb-1">📋 SYARAT FILE PROJECT:</p>
+                        <p id="requirementText" class="font-vt text-xl text-[#a7f070]">
+                            Silakan pilih tingkat kelas terlebih dahulu untuk melihat ketentuan file.
+                        </p>
+                    </div>
+
+                    <!-- Upload File Project -->
+                    <div>
+                        <label class="block font-pixel text-[10px] sm:text-xs text-[#1a1c2c] mb-1.5">
+                            3. UPLOAD FILE TUGAS PROJECT *
+                        </label>
+                        <div class="relative border-4 border-dashed border-[#1a1c2c] bg-[#e2e8f0] p-4 text-center hover:bg-[#fffbe6] transition">
+                            <input type="file" id="projectFiles" multiple onchange="handleFileSelection(this)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <div class="space-y-1 pointer-events-none">
+                                <div class="text-3xl">📁</div>
+                                <p class="font-pixel text-[10px] sm:text-xs text-[#29366f]">
+                                    KLIK ATAU SERET FILE KE SINI
+                                </p>
+                                <p id="fileFormatHint" class="font-vt text-lg text-[#566c86]">
+                                    Pilih kelas terlebih dahulu (Kelas 7: .html atau .html + .css | Kelas 8 & 9: .aia)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Daftar File Terpilih -->
+                        <div id="selectedFilesList" class="mt-2 space-y-1.5"></div>
+                    </div>
+
+                    <!-- Tombol Submit -->
+                    <div class="pt-2">
+                        <button type="submit" id="btnSubmitProject" class="w-full pixel-btn bg-[#38b764] hover:bg-[#2fa157] text-white py-3.5 text-xs sm:text-sm flex items-center justify-center gap-2">
+                            <span>🚀</span>
+                            <span>KUMPULKAN TUGAS SEKARANG!</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAHAP 3: HALAMAN SELAMAT / HEBOH SETELAH SUBMIT           -->
+        <!-- ========================================================= -->
+        <section id="stageCelebration" class="hidden relative w-full min-h-[calc(100vh-68px)] flex flex-col items-center justify-center px-3 py-6 overflow-hidden">
+            <!-- Canvas Confetti & Kembang Api 8-Bit -->
+            <canvas id="confettiCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-30"></canvas>
+
+            <!-- Kartu Utama Perayaan -->
+            <div class="relative z-40 w-full max-w-2xl pixel-box-light rainbow-frame p-5 sm:p-7 text-center">
+                <!-- Pita Atas Berkedip -->
+                <div class="inline-block pixel-box-gold px-4 py-1.5 mb-4 animate-bounce">
+                    <span class="font-pixel text-[10px] sm:text-xs text-[#1a1c2c]">
+                        ★ MISSION ACCOMPLISHED! +1000 XP ★
+                    </span>
+                </div>
+
+                <!-- Ilustrasi Pixel Art Siswa Merayakan Keberhasilan (SVG 8-Bit Tajam) -->
+                <div class="my-2 flex justify-center">
+                    <div class="relative animate-pixel-jump">
+                        <!-- Efek Aura Bintang di Belakang Siswa -->
+                        <div class="w-44 h-44 sm:w-52 sm:h-52 bg-[#41a6f6] border-4 border-[#1a1c2c] rounded-lg flex items-center justify-center relative overflow-hidden shadow-lg">
+                            <!-- Latar Sinar Matahari Retro -->
+                            <div class="absolute inset-0 opacity-30 bg-[radial-gradient(circle,#ffcd75_20%,transparent_70%)]"></div>
+                            
+                            <!-- Karakter Siswa 8-Bit SVG mengangkat Piala & Tugas Selesai -->
+                            <svg viewBox="0 0 32 32" class="w-40 h-40 sm:w-48 sm:h-48 relative z-10" shape-rendering="crispEdges">
+                                <!-- Kembang api mini -->
+                                <rect x="3" y="4" width="2" height="2" fill="#ffcd75"/>
+                                <rect x="27" y="5" width="2" height="2" fill="#ff004d"/>
+                                <rect x="5" y="13" width="2" height="2" fill="#a7f070"/>
+                                <rect x="25" y="14" width="2" height="2" fill="#ffcd75"/>
+
+                                <!-- Piala Emas di Tangan Kiri (Terangkat!) -->
+                                <rect x="4" y="6" width="6" height="4" fill="#ffcd75"/>
+                                <rect x="3" y="7" width="1" height="2" fill="#ef7d57"/>
+                                <rect x="10" y="7" width="1" height="2" fill="#ef7d57"/>
+                                <rect x="6" y="10" width="2" height="2" fill="#ef7d57"/>
+                                <rect x="5" y="12" width="4" height="1" fill="#ffcd75"/>
+
+                                <!-- Gulungan Sertifikat/Tugas di Tangan Kanan (Terangkat!) -->
+                                <rect x="23" y="7" width="5" height="3" fill="#ffffff"/>
+                                <rect x="25" y="7" width="1" height="3" fill="#ff004d"/>
+
+                                <!-- Rambut Siswa -->
+                                <rect x="11" y="5" width="10" height="3" fill="#1a1c2c"/>
+                                <rect x="10" y="7" width="2" height="4" fill="#1a1c2c"/>
+                                <rect x="20" y="7" width="2" height="4" fill="#1a1c2c"/>
+
+                                <!-- Wajah Bahagia -->
+                                <rect x="12" y="8" width="8" height="7" fill="#ffccaa"/>
+                                <!-- Mata Berbinar (^ ^) -->
+                                <rect x="13" y="10" width="2" height="1" fill="#1a1c2c"/>
+                                <rect x="17" y="10" width="2" height="1" fill="#1a1c2c"/>
+                                <!-- Pipi Merona -->
+                                <rect x="12" y="12" width="1" height="1" fill="#ff004d"/>
+                                <rect x="19" y="12" width="1" height="1" fill="#ff004d"/>
+                                <!-- Senyum Lebar -->
+                                <rect x="14" y="12" width="4" height="2" fill="#b13e53"/>
+                                <rect x="15" y="12" width="2" height="1" fill="#ffffff"/>
+
+                                <!-- Lengan Terangkat Merayakan (Horay!) -->
+                                <rect x="6" y="13" width="4" height="3" fill="#ffffff"/>
+                                <rect x="6" y="12" width="3" height="2" fill="#ffccaa"/>
+                                <rect x="22" y="13" width="4" height="3" fill="#ffffff"/>
+                                <rect x="23" y="10" width="3" height="3" fill="#ffccaa"/>
+
+                                <!-- Seragam Sekolah SMP (Putih Biru Dongker + Dasi) -->
+                                <rect x="10" y="15" width="12" height="7" fill="#ffffff"/>
+                                <!-- Dasi Biru -->
+                                <rect x="15" y="15" width="2" height="5" fill="#29366f"/>
+                                <!-- Saku -->
+                                <rect x="18" y="17" width="2" height="2" fill="#41a6f6"/>
+
+                                <!-- Celana/Rok Biru SMP -->
+                                <rect x="10" y="22" width="12" height="5" fill="#29366f"/>
+                                <rect x="15" y="24" width="2" height="3" fill="#1a1c2c"/>
+
+                                <!-- Sepatu Hitam -->
+                                <rect x="9" y="27" width="5" height="2" fill="#1a1c2c"/>
+                                <rect x="18" y="27" width="5" height="2" fill="#1a1c2c"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teks Ucapan Selamat Sesuai Permintaan -->
+                <h2 class="font-pixel text-sm sm:text-lg md:text-xl text-[#b13e53] mt-3 mb-2 leading-relaxed animate-pulse-glow">
+                    "Selamat! Anda telah berhasil mengumpulkan tugas, Terima Kasih"
+                </h2>
+
+                <p class="font-vt text-xl sm:text-2xl text-[#29366f] mb-4">
+                    Data dan file projectmu telah tercatat otomatis ke dalam Spreadsheet guru!
+                </p>
+
+                <!-- Kartu Bukti Pengumpulan -->
+                <div class="bg-[#1a1c2c] text-left p-4 border-4 border-[#38b764] text-white space-y-1.5 mb-5 font-vt text-xl">
+                    <div class="flex justify-between border-b border-[#566c86] pb-1">
+                        <span class="text-[#94b0c2]">NAMA SISWA:</span>
+                        <span id="receiptName" class="text-[#ffcd75] font-bold">-</span>
+                    </div>
+                    <div class="flex justify-between border-b border-[#566c86] pb-1">
+                        <span class="text-[#94b0c2]">KELAS:</span>
+                        <span id="receiptGrade" class="text-[#a7f070] font-bold">-</span>
+                    </div>
+                    <div class="flex justify-between border-b border-[#566c86] pb-1">
+                        <span class="text-[#94b0c2]">FILE DIKUMPULKAN:</span>
+                        <span id="receiptFiles" class="text-[#41a6f6] font-bold text-right">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-[#94b0c2]">WAKTU SUBMIT:</span>
+                        <span id="receiptTime" class="text-white">-</span>
+                    </div>
+                </div>
+
+                <!-- Tombol Aksi Setelah Sukses -->
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <button onclick="replayFanfare()" class="pixel-btn bg-[#ffcd75] text-[#1a1c2c] text-[10px] sm:text-xs px-3.5 py-3">
+                        🎺 PUTAR MUSIK SELAMAT
+                    </button>
+                    <button onclick="openSpreadsheetModal()" class="pixel-btn bg-[#41a6f6] text-[#1a1c2c] text-[10px] sm:text-xs px-3.5 py-3">
+                        🔒 LIHAT SPREADSHEET
+                    </button>
+                    <button onclick="resetToNewStudent()" class="pixel-btn bg-[#38b764] text-white text-[10px] sm:text-xs px-3.5 py-3">
+                        🔄 SISWA BERIKUTNYA
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================================= -->
+    <!-- MODAL 1: REKAP DATA SPREADSHEET & EXPORT CSV/EXCEL        -->
+    <!-- ========================================================= -->
+    <div id="spreadsheetModal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-3">
+        <div class="pixel-box-light w-full max-w-4xl max-h-[90vh] flex flex-col p-4 sm:p-6">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b-4 border-[#1a1c2c] pb-3 mb-4">
+                <div>
+                    <h3 class="font-pixel text-xs sm:text-sm text-[#29366f]">
+                        📊 REKAP PENGUMPULAN TUGAS (SPREADSHEET)
+                    </h3>
+                    <p class="font-vt text-lg text-[#566c86]">
+                        Semua tugas yang dikumpulkan siswa tersimpan di sini & siap diunduh sebagai Spreadsheet.
+                    </p>
+                </div>
+                <button onclick="closeSpreadsheetModal()" class="pixel-btn bg-[#b13e53] text-white text-xs px-3 py-2">
+                    ✖ TUTUP
+                </button>
+            </div>
+
+            <!-- Baris Tombol Export -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="syncFromGoogleSheets()" id="btnRefreshCloud" class="pixel-btn bg-[#41a6f6] text-[#1a1c2c] text-[10px] sm:text-xs px-3 py-2.5 flex items-center gap-1.5">
+                        <span>🔄</span>
+                        <span>REFRESH DATA LIVE</span>
+                    </button>
+                    <button onclick="exportToCSV()" class="pixel-btn bg-[#38b764] text-white text-[10px] sm:text-xs px-3 py-2.5 flex items-center gap-1.5">
+                        <span>📥</span>
+                        <span>DOWNLOAD EXCEL (.CSV)</span>
+                    </button>
+                    <button onclick="clearAllRecords()" class="pixel-btn bg-[#ef7d57] text-[#1a1c2c] text-[10px] sm:text-xs px-3 py-2.5">
+                        🗑️ HAPUS LOKAL
+                    </button>
+                </div>
+                <span id="syncStatusBadge" class="font-vt text-lg px-2.5 py-1 bg-[#1a1c2c] text-[#a7f070] border-2 border-[#1a1c2c]">
+                    Mode Penyimpanan: Lokal & Siap Export CSV
+                </span>
+            </div>
+
+            <!-- Tabel Ala Spreadsheet -->
+            <div class="flex-1 overflow-auto border-4 border-[#1a1c2c] bg-white">
+                <table class="w-full text-left border-collapse font-vt text-lg">
+                    <thead class="bg-[#29366f] text-[#ffcd75] sticky top-0">
+                        <tr>
+                            <th class="p-2.5 border-2 border-[#1a1c2c]">No</th>
+                            <th class="p-2.5 border-2 border-[#1a1c2c]">Waktu</th>
+                            <th class="p-2.5 border-2 border-[#1a1c2c]">Nama Siswa</th>
+                            <th class="p-2.5 border-2 border-[#1a1c2c]">Kelas</th>
+                            <th class="p-2.5 border-2 border-[#1a1c2c]">File Tugas</th>
+                            <th class="p-2.5 border-2 border-[#1a1c2c]">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="spreadsheetTableBody" class="text-[#1a1c2c]">
+                        <!-- Diisi otomatis via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL PASSWORD PENGATURAN (PROTEKSI UNTUK SISWA)          -->
+    <!-- ========================================================= -->
+    <div id="passwordModal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-3">
+        <div class="pixel-box-light w-full max-w-md p-5">
+            <div class="flex items-center justify-between border-b-4 border-[#1a1c2c] pb-3 mb-4">
+                <h3 class="font-pixel text-xs sm:text-sm text-[#b13e53]">
+                    🔒 AKSES KHUSUS PEMBINA
+                </h3>
+                <button onclick="closePasswordModal()" class="pixel-btn bg-[#566c86] text-white text-xs px-2.5 py-1">
+                    ✖
+                </button>
+            </div>
+            <form onsubmit="verifyTeacherPassword(event)" class="space-y-3">
+                <p id="passwordPromptText" class="font-vt text-xl text-[#1a1c2c]">
+                    Masukkan password pembina untuk melanjutkan:
+                </p>
+                <div id="passwordError" class="hidden p-2 bg-[#ff004d] text-white border-2 border-[#1a1c2c] font-vt text-lg">
+                    ⚠️ Password salah! Akses ditolak.
+                </div>
+                <input type="password" id="teacherPasswordInput" required placeholder="Masukkan password..." class="pixel-input">
+                <div class="flex justify-end gap-2 pt-1">
+                    <button type="button" onclick="closePasswordModal()" class="pixel-btn bg-[#566c86] text-white text-[10px] px-3 py-2">
+                        BATAL
+                    </button>
+                    <button type="submit" id="passwordSubmitBtn" class="pixel-btn bg-[#38b764] text-white text-[10px] px-4 py-2">
+                        BUKA AKSES
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL 2: PENGATURAN GURU (INTEGRASI GOOGLE SHEETS LIVE)   -->
+    <!-- ========================================================= -->
+    <div id="teacherModal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-3">
+        <div class="pixel-box-light w-full max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+            <div class="flex items-center justify-between border-b-4 border-[#1a1c2c] pb-3 mb-4">
+                <h3 class="font-pixel text-xs sm:text-sm text-[#29366f]">
+                    ⚙️ PENGATURAN GURU & GOOGLE SHEETS
+                </h3>
+                <button onclick="closeTeacherModal()" class="pixel-btn bg-[#b13e53] text-white text-xs px-3 py-1.5">
+                    ✖
+                </button>
+            </div>
+
+            <div class="space-y-4 font-vt text-xl">
+                <p>
+                    Hubungkan aplikasi ini dengan <b>Google Spreadsheet</b> agar setiap tugas yang dikumpulkan siswa dari HP/Laptop mana pun langsung tersimpan otomatis ke Google Sheets & Google Drive Anda!
+                </p>
+                <div class="p-3 bg-[#fffbe6] border-4 border-[#1a1c2c] text-base space-y-1">
+                    <p class="font-bold text-[#b13e53]">📌 Langkah Singkat Menghubungkan Google Sheets:</p>
+                    <ol class="list-decimal list-inside space-y-0.5 text-[#1a1c2c]">
+                        <li>Buka <b>sheets.new</b> di browser untuk membuat Spreadsheet baru.</li>
+                        <li>Klik menu <b>Extensions → Apps Script</b>, hapus kode lama, lalu tempel kode di bawah.</li>
+                        <li>Klik tombol biru <b>Deploy → New deployment → Web app</b>.</li>
+                        <li>Atur <i>Execute as:</i> <b>Me</b>, dan <i>Who has access:</i> <b>Anyone</b>, lalu klik <b>Deploy</b>.</li>
+                        <li>Salin <b>Web app URL</b> yang muncul, tempel di kolom di bawah, lalu klik <b>SIMPAN & TES</b>.</li>
+                    </ol>
+                </div>
+                <div>
+                    <label class="block font-pixel text-[10px] text-[#1a1c2c] mb-1">
+                        URL WEB APP GOOGLE APPS SCRIPT:
+                    </label>
+                    <input type="url" id="gasUrlInput" placeholder="https://script.google.com/macros/s/...../exec" class="pixel-input">
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="saveGasUrl()" class="pixel-btn bg-[#38b764] text-white text-[10px] sm:text-xs px-4 py-2.5">
+                        💾 SIMPAN & TES KONEKSI
+                    </button>
+                    <button onclick="copyGasScript()" class="pixel-btn bg-[#ffcd75] text-[#1a1c2c] text-[10px] sm:text-xs px-4 py-2.5">
+                        📋 SALIN KODE APPS SCRIPT
+                    </button>
+                    <button onclick="downloadHtmlFile()" class="pixel-btn bg-[#41a6f6] text-[#1a1c2c] text-[10px] sm:text-xs px-4 py-2.5">
+                        ⬇️ DOWNLOAD INDEX.HTML
+                    </button>
+                </div>
+
+                <div id="teacherToast" class="hidden p-2 bg-[#38b764] text-white border-2 border-[#1a1c2c] text-center"></div>
+
+                <!-- Pratinjau Kode Google Apps Script -->
+                <div class="bg-[#1a1c2c] text-[#a7f070] p-3 border-4 border-[#566c86] text-sm overflow-x-auto">
+                    <p class="text-[#ffcd75] mb-1">// Tempel kode lengkap ini di Extensions > Apps Script pada Google Sheets Anda:</p>
+                    <pre id="gasCodeBlock" class="whitespace-pre-wrap font-mono text-xs">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Waktu", "Nama Siswa", "Kelas", "Nama File", "Link File Google Drive", "Status"]);
+  }
+  var data = JSON.parse(e.postData.contents);
+  var folder = DriveApp.getRootFolder();
+  var fileUrls = [];
+  if (data.files && data.files.length > 0) {
+    data.files.forEach(function(f) {
+      var decoded = Utilities.base64Decode(f.base64);
+      var blob = Utilities.newBlob(decoded, f.type || "application/octet-stream", data.studentName + "_" + data.grade + "_" + f.name);
+      var savedFile = folder.createFile(blob);
+      fileUrls.push(savedFile.getUrl());
+    });
+  }
+  sheet.appendRow([new Date(), data.studentName, data.grade, data.fileNames, fileUrls.join(", "), "Terkumpul"]);
+  return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var rows = sheet.getDataRange().getValues();
+  var records = [];
+  for (var i = rows.length - 1; i >= 1; i--) {
+    records.push({
+      timestamp: Utilities.formatDate(new Date(rows[i][0]), Session.getScriptTimeZone(), "dd MMM yyyy, HH:mm"),
+      studentName: rows[i][1],
+      grade: rows[i][2],
+      fileNames: rows[i][3],
+      fileUrl: rows[i][4] || "",
+      status: rows[i][5] || "Terkumpul ✓"
+    });
+  }
+  return ContentService.createTextOutput(JSON.stringify({status: "success", records: records})).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* =========================================================================
+           1. AUDIO ENGINE 8-BIT (WEB AUDIO API TANPA FILE EKSTERNAL)
+           ========================================================================= */
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('btnToggleSound');
+            if (soundEnabled) {
+                btn.innerHTML = '<span id="soundIcon">🔊</span><span class="hidden sm:inline">SFX: ON</span>';
+                btn.classList.replace('bg-[#b13e53]', 'bg-[#38b764]');
+                playTone(523.25, 0.08, 'square');
+            } else {
+                btn.innerHTML = '<span id="soundIcon">🔇</span><span class="hidden sm:inline">SFX: OFF</span>';
+                btn.classList.replace('bg-[#38b764]', 'bg-[#b13e53]');
+            }
+        }
+
+        function playTone(freq, duration, type = 'square', delay = 0, gainVal = 0.08) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+                
+                gain.gain.setValueAtTime(gainVal, audioCtx.currentTime + delay);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(audioCtx.currentTime + delay);
+                osc.stop(audioCtx.currentTime + delay + duration);
+            } catch (e) {}
+        }
+
+        // Suara Langkah Kaki 8-Bit
+        let lastStepTime = 0;
+        function playStepSound() {
+            const now = Date.now();
+            if (now - lastStepTime > 170) {
+                playTone(150 + Math.random() * 40, 0.05, 'triangle', 0, 0.05);
+                lastStepTime = now;
+            }
+        }
+
+        // Suara Masuk Pintu Sekolah
+        function playDoorSound() {
+            playTone(392.00, 0.1, 'square', 0, 0.1);
+            playTone(523.25, 0.15, 'square', 0.1, 0.1);
+            playTone(659.25, 0.25, 'square', 0.2, 0.1);
+        }
+
+        // Musik Fanfare Kemenangan Heboh!
+        function replayFanfare() {
+            const notes = [
+                { f: 523.25, d: 0.12, t: 0.00 }, // C5
+                { f: 659.25, d: 0.12, t: 0.12 }, // E5
+                { f: 783.99, d: 0.12, t: 0.24 }, // G5
+                { f: 1046.50, d: 0.30, t: 0.36 }, // C6
+                { f: 783.99, d: 0.14, t: 0.70 }, // G5
+                { f: 1046.50, d: 0.55, t: 0.86 }  // C6 panjang
+            ];
+            notes.forEach(n => playTone(n.f, n.d, 'square', n.t, 0.12));
+        }
+
+        /* =========================================================================
+           2. ENGINE GAME 8-BIT DUNIA SEKOLAH (CANVAS PIXEL ART)
+           ========================================================================= */
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // State Pemain (Siswa)
+        const player = {
+            x: 120,
+            y: 360,
+            w: 44,
+            h: 56,
+            speed: 4.2,
+            dir: 'right',
+            frame: 0,
+            animTimer: 0,
+            moving: false
+        };
+
+        // Area Pintu Sekolah (Diperbarui saat resize)
+        let schoolDoor = { x: 600, y: 260, w: 68, h: 86 };
+        let clouds = [
+            { x: 80, y: 60, s: 1.1 },
+            { x: 340, y: 40, s: 0.9 },
+            { x: 620, y: 75, s: 1.2 },
+            { x: 900, y: 50, s: 1.0 }
+        ];
+
+        const keys = {};
+        let currentStage = 'game'; // 'game' | 'form' | 'celebration'
+        let doorTriggered = false;
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+
+            // Posisikan siswa di sisi kiri jalan jika baru mulai
+            if (player.x > canvas.width - 80) player.x = 60;
+            player.y = Math.min(Math.max(player.y, canvas.height * 0.52), canvas.height - 90);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Input Keyboard
+        window.addEventListener('keydown', (e) => {
+            if (currentStage !== 'game') return;
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+                e.preventDefault();
+            }
+            keys[e.key.toLowerCase()] = true;
+        });
+
+        window.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // Input Tombol D-Pad Layar Sentuh & Mouse
+        function bindDpadButton(btnId, keyName) {
+            const btn = document.getElementById(btnId);
+            const start = (e) => { e.preventDefault(); keys[keyName] = true; };
+            const end = (e) => { e.preventDefault(); keys[keyName] = false; };
+            btn.addEventListener('mousedown', start);
+            btn.addEventListener('mouseup', end);
+            btn.addEventListener('mouseleave', end);
+            btn.addEventListener('touchstart', start, { passive: false });
+            btn.addEventListener('touchend', end, { passive: false });
+        }
+
+        bindDpadButton('btnUp', 'arrowup');
+        bindDpadButton('btnDown', 'arrowdown');
+        bindDpadButton('btnLeft', 'arrowleft');
+        bindDpadButton('btnRight', 'arrowright');
+
+        // Klik pada Canvas untuk berjalan atau langsung klik Pintu Sekolah
+        canvas.addEventListener('click', (e) => {
+            if (currentStage !== 'game') return;
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            // Jika mengklik area gedung/pintu sekolah, langsung arahkan masuk
+            if (
+                clickX >= schoolDoor.x - 40 &&
+                clickX <= schoolDoor.x + schoolDoor.w + 40 &&
+                clickY >= schoolDoor.y - 60 &&
+                clickY <= schoolDoor.y + schoolDoor.h + 40
+            ) {
+                enterSchoolDoor();
+            } else {
+                // Gerakkan langkah kecil ke arah klik
+                if (clickX > player.x) player.x += 35;
+                else player.x -= 35;
+                playStepSound();
+            }
+        });
+
+        function updateGame() {
+            if (currentStage !== 'game') return;
+
+            // Gerakkan awan pelan
+            clouds.forEach(c => {
+                c.x += 0.25 * c.s;
+                if (c.x > canvas.width + 100) c.x = -120;
+            });
+
+            let dx = 0;
+            let dy = 0;
+
+            if (keys['arrowleft'] || keys['a']) { dx = -player.speed; player.dir = 'left'; }
+            if (keys['arrowright'] || keys['d']) { dx = player.speed; player.dir = 'right'; }
+            if (keys['arrowup'] || keys['w']) { dy = -player.speed; }
+            if (keys['arrowdown'] || keys['s']) { dy = player.speed; }
+
+            player.moving = (dx !== 0 || dy !== 0);
+
+            if (player.moving) {
+                playStepSound();
+                player.x += dx;
+                player.y += dy;
+
+                // Batas area berjalan (halaman & jalan sekolah)
+                const minY = canvas.height * 0.48;
+                const maxY = canvas.height - player.h - 20;
+                player.x = Math.max(16, Math.min(canvas.width - player.w - 16, player.x));
+                player.y = Math.max(minY, Math.min(maxY, player.y));
+
+                player.animTimer++;
+                if (player.animTimer > 8) {
+                    player.frame = (player.frame + 1) % 2;
+                    player.animTimer = 0;
+                }
+            } else {
+                player.frame = 0;
+            }
+
+            // Deteksi Tabrakan dengan Pintu Sekolah
+            const pCenterX = player.x + player.w / 2;
+            const pCenterY = player.y + player.h / 2;
+
+            if (
+                !doorTriggered &&
+                pCenterX >= schoolDoor.x - 10 &&
+                pCenterX <= schoolDoor.x + schoolDoor.w + 10 &&
+                pCenterY >= schoolDoor.y - 10 &&
+                pCenterY <= schoolDoor.y + schoolDoor.h + 25
+            ) {
+                doorTriggered = true;
+                enterSchoolDoor();
+            }
+        }
+
+        function drawPixelRect(x, y, w, h, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
+        }
+
+        function drawCloud(x, y, scale) {
+            const s = 12 * scale;
+            drawPixelRect(x, y, s * 4, s * 1.5, '#ffffff');
+            drawPixelRect(x + s * 0.6, y - s * 0.8, s * 2.5, s * 1.2, '#ffffff');
+            drawPixelRect(x, y + s * 1.2, s * 4, s * 0.3, '#d6e9ff');
+        }
+
+        function drawTree(x, y) {
+            // Batang pohon
+            drawPixelRect(x + 16, y + 36, 16, 28, '#5d275d');
+            drawPixelRect(x + 20, y + 36, 6, 28, '#8b4513');
+            // Daun pixel bertumpuk
+            drawPixelRect(x, y + 16, 48, 24, '#257179');
+            drawPixelRect(x + 4, y + 6, 40, 22, '#38b764');
+            drawPixelRect(x + 12, y - 4, 24, 14, '#a7f070');
+        }
+
+        function drawSchoolBuilding() {
+            const W = canvas.width;
+            const H = canvas.height;
+            const horizonY = Math.floor(H * 0.52);
+
+            // Posisi gedung sekolah di kanan/tengah-kanan
+            const bWidth = Math.min(380, Math.max(250, W * 0.38));
+            const bHeight = Math.min(220, Math.max(170, H * 0.34));
+            const bx = W - bWidth - Math.max(24, W * 0.06);
+            const by = horizonY - bHeight + 24;
+
+            // Bayangan Gedung
+            drawPixelRect(bx + 10, by + 10, bWidth, bHeight, 'rgba(26, 28, 44, 0.35)');
+
+            // Atap Segitiga / Trapesium 8-Bit
+            drawPixelRect(bx - 14, by - 22, bWidth + 28, 24, '#b13e53');
+            drawPixelRect(bx - 6, by - 36, bWidth + 12, 16, '#8f2d40');
+            drawPixelRect(bx - 14, by - 2, bWidth + 28, 6, '#1a1c2c');
+
+            // Menara Jam Sekolah di Tengah Atap
+            const towerW = 74;
+            const towerX = bx + bWidth / 2 - towerW / 2;
+            const towerY = by - 76;
+            drawPixelRect(towerX, towerY, towerW, 42, '#f4f4f4');
+            ctx.strokeStyle = '#1a1c2c';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(towerX, towerY, towerW, 42);
+            // Jam Dinding Retro
+            drawPixelRect(towerX + 21, towerY + 7, 32, 28, '#ffcd75');
+            ctx.strokeRect(towerX + 21, towerY + 7, 32, 28);
+            drawPixelRect(towerX + 35, towerY + 12, 4, 10, '#1a1c2c');
+            drawPixelRect(towerX + 35, towerY + 20, 9, 4, '#1a1c2c');
+
+            // Tiang Bendera di Samping Gedung
+            const flagX = bx - 36;
+            drawPixelRect(flagX, by - 40, 6, bHeight + 40, '#94b0c2');
+            // Bendera Merah Putih berkibar
+            const wave = Math.sin(Date.now() / 200) * 3;
+            drawPixelRect(flagX + 6, by - 36 + wave, 34, 11, '#ff004d');
+            drawPixelRect(flagX + 6, by - 25 + wave, 34, 11, '#ffffff');
+            ctx.strokeRect(flagX + 6, by - 36 + wave, 34, 22);
+
+            // Dinding Utama Gedung Sekolah
+            drawPixelRect(bx, by, bWidth, bHeight, '#f4f4f4');
+            ctx.strokeStyle = '#1a1c2c';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(bx, by, bWidth, bHeight);
+
+            // Papan Nama "EKSKUL CANICOMP"
+            const signW = Math.min(220, bWidth - 30);
+            const signX = bx + (bWidth - signW) / 2;
+            drawPixelRect(signX, by + 12, signW, 28, '#29366f');
+            ctx.strokeRect(signX, by + 12, signW, 28);
+            ctx.fillStyle = '#ffcd75';
+            ctx.font = 'bold 10px "Press Start 2P", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('EKSKUL CANICOMP', bx + bWidth / 2, by + 31);
+
+            // Jendela Kelas Kiri & Kanan
+            const winW = 44;
+            const winH = 44;
+            if (bWidth > 270) {
+                // Jendela Kiri
+                drawPixelRect(bx + 22, by + 56, winW, winH, '#41a6f6');
+                ctx.strokeRect(bx + 22, by + 56, winW, winH);
+                drawPixelRect(bx + 42, by + 56, 4, winH, '#1a1c2c');
+                drawPixelRect(bx + 22, by + 76, winW, 4, '#1a1c2c');
+
+                // Jendela Kanan
+                drawPixelRect(bx + bWidth - 22 - winW, by + 56, winW, winH, '#41a6f6');
+                ctx.strokeRect(bx + bWidth - 22 - winW, by + 56, winW, winH);
+                drawPixelRect(bx + bWidth - 22 - winW + 20, by + 56, 4, winH, '#1a1c2c');
+                drawPixelRect(bx + bWidth - 22 - winW, by + 76, winW, 4, '#1a1c2c');
+            }
+
+            // PINTU MASUK UTAMA SEKOLAH (TARGET MISI!)
+            const doorW = 68;
+            const doorH = 84;
+            const doorX = bx + bWidth / 2 - doorW / 2;
+            const doorY = by + bHeight - doorH;
+
+            // Update hitbox pintu global
+            schoolDoor = { x: doorX, y: doorY, w: doorW, h: doorH };
+
+            // Kusen & Daun Pintu
+            drawPixelRect(doorX - 6, doorY - 6, doorW + 12, doorH + 6, '#5d275d');
+            drawPixelRect(doorX, doorY, doorW, doorH, '#ef7d57');
+            // Dua daun pintu
+            drawPixelRect(doorX + doorW / 2 - 2, doorY, 4, doorH, '#1a1c2c');
+            // Gagang pintu emas
+            drawPixelRect(doorX + doorW / 2 - 10, doorY + 42, 5, 8, '#ffcd75');
+            drawPixelRect(doorX + doorW / 2 + 5, doorY + 42, 5, 8, '#ffcd75');
+
+            // Karpet Merah Menyambut di Depan Pintu
+            drawPixelRect(doorX - 4, doorY + doorH, doorW + 8, 28, '#b13e53');
+            drawPixelRect(doorX, doorY + doorH, doorW, 24, '#ff004d');
+
+            // Penanda Quest Berkedip di Atas Pintu ("MASUK SINI!")
+            const bob = Math.sin(Date.now() / 180) * 6;
+            const tagY = doorY - 42 + bob;
+            drawPixelRect(doorX - 24, tagY, doorW + 48, 24, '#ffcd75');
+            ctx.strokeStyle = '#1a1c2c';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(doorX - 24, tagY, doorW + 48, 24);
+            ctx.fillStyle = '#1a1c2c';
+            ctx.font = 'bold 9px "Press Start 2P", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('▼ KUMPUL TUGAS', doorX + doorW / 2, tagY + 15);
+        }
+
+        function drawStudentCharacter() {
+            const x = Math.floor(player.x);
+            const y = Math.floor(player.y);
+            const bounce = player.moving && player.frame === 1 ? -4 : 0;
+
+            // Bayangan di tanah
+            drawPixelRect(x + 6, y + player.h - 4, player.w - 12, 8, 'rgba(26, 28, 44, 0.45)');
+
+            // Ransel Sekolah (Membawa Laptop/Project!)
+            const bagX = player.dir === 'right' ? x + 2 : x + player.w - 14;
+            drawPixelRect(bagX, y + 20 + bounce, 12, 20, '#ef7d57');
+            ctx.strokeStyle = '#1a1c2c';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(bagX, y + 20 + bounce, 12, 20);
+
+            // Kepala & Rambut 8-Bit (Gaya Karakter Blok Roblox / Retro)
+            drawPixelRect(x + 10, y + 2 + bounce, 24, 20, '#ffccaa');
+            // Rambut
+            drawPixelRect(x + 8, y + bounce, 28, 8, '#1a1c2c');
+            if (player.dir === 'right') {
+                drawPixelRect(x + 8, y + 6 + bounce, 6, 10, '#1a1c2c');
+                // Mata & Senyum
+                drawPixelRect(x + 26, y + 10 + bounce, 4, 4, '#1a1c2c');
+                drawPixelRect(x + 24, y + 16 + bounce, 6, 2, '#b13e53');
+            } else {
+                drawPixelRect(x + 30, y + 6 + bounce, 6, 10, '#1a1c2c');
+                // Mata & Senyum
+                drawPixelRect(x + 14, y + 10 + bounce, 4, 4, '#1a1c2c');
+                drawPixelRect(x + 14, y + 16 + bounce, 6, 2, '#b13e53');
+            }
+
+            // Seragam Putih SMP + Dasi Biru
+            drawPixelRect(x + 10, y + 22 + bounce, 24, 16, '#ffffff');
+            const tieX = player.dir === 'right' ? x + 24 : x + 16;
+            drawPixelRect(tieX, y + 22 + bounce, 4, 11, '#29366f');
+
+            // Lengan & Map Tugas di Tangan
+            drawPixelRect(x + 16, y + 24 + bounce, 10, 12, '#ffccaa');
+            // Map Kuning Project
+            const mapX = player.dir === 'right' ? x + 24 : x + 8;
+            drawPixelRect(mapX, y + 26 + bounce, 12, 9, '#ffcd75');
+
+            // Celana Biru SMP & Kaki Berjalan
+            drawPixelRect(x + 11, y + 38 + bounce, 22, 10, '#29366f');
+            if (player.frame === 0) {
+                drawPixelRect(x + 12, y + 48, 8, 8, '#1a1c2c');
+                drawPixelRect(x + 24, y + 48, 8, 8, '#1a1c2c');
+            } else {
+                drawPixelRect(x + 8, y + 46, 8, 8, '#1a1c2c');
+                drawPixelRect(x + 28, y + 48, 8, 8, '#1a1c2c');
+            }
+        }
+
+        function renderGame() {
+            const W = canvas.width;
+            const H = canvas.height;
+            const horizonY = Math.floor(H * 0.52);
+
+            // 1. Langit Biru Cerah 8-Bit
+            drawPixelRect(0, 0, W, horizonY, '#41a6f6');
+            // Matahari Pixel di Kiri Atas
+            drawPixelRect(46, 82, 42, 42, '#ffcd75');
+            drawPixelRect(52, 88, 30, 30, '#fff3b0');
+
+            // 2. Awan Bergerak
+            clouds.forEach(c => drawCloud(c.x, c.y, c.s));
+
+            // 3. Bukit Hijau di Kejauhan
+            drawPixelRect(0, horizonY - 26, W * 0.45, 26, '#257179');
+            drawPixelRect(W * 0.35, horizonY - 18, W * 0.65, 18, '#2e8b57');
+
+            // 4. Halaman Rumput Sekolah
+            drawPixelRect(0, horizonY, W, H - horizonY, '#38b764');
+            // Tekstur Rumput Pixel
+            for (let gx = 20; gx < W; gx += 90) {
+                drawPixelRect(gx, horizonY + 18, 12, 4, '#a7f070');
+                drawPixelRect(gx + 40, H - 34, 14, 4, '#a7f070');
+            }
+
+            // 5. Jalan Paving Menuju Sekolah
+            const roadY = Math.floor(H * 0.66);
+            const roadH = Math.floor(H * 0.22);
+            drawPixelRect(0, roadY, W, roadH, '#566c86');
+            drawPixelRect(0, roadY, W, 6, '#333c57');
+            drawPixelRect(0, roadY + roadH - 6, W, 6, '#333c57');
+            // Garis Marka Jalan
+            for (let rx = 20; rx < W; rx += 70) {
+                drawPixelRect(rx, roadY + roadH / 2 - 3, 36, 6, '#ffcd75');
+            }
+
+            // 6. Pohon di Halaman Kiri
+            drawTree(34, horizonY - 36);
+            if (W > 640) {
+                drawTree(190, horizonY - 30);
+            }
+
+            // 7. Gedung Sekolah & Pintu Utama
+            drawSchoolBuilding();
+
+            // 8. Karakter Siswa
+            drawStudentCharacter();
+        }
+
+        function gameLoop() {
+            updateGame();
+            renderGame();
+            requestAnimationFrame(gameLoop);
+        }
+
+        /* =========================================================================
+           3. NAVIGASI ANTAR TAHAP (GAME -> FORM -> HALAMAN SELAMAT)
+           ========================================================================= */
+        function enterSchoolDoor() {
+            playDoorSound();
+            currentStage = 'form';
+            document.getElementById('stageGame').classList.add('hidden');
+            document.getElementById('stageCelebration').classList.add('hidden');
+            document.getElementById('stageForm').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function backToGame() {
+            currentStage = 'game';
+            doorTriggered = false;
+            player.x = 80; // Kembalikan siswa ke halaman depan
+            document.getElementById('stageForm').classList.add('hidden');
+            document.getElementById('stageCelebration').classList.add('hidden');
+            document.getElementById('stageGame').classList.remove('hidden');
+            resizeCanvas();
+        }
+
+        function resetToNewStudent() {
+            document.getElementById('projectForm').reset();
+            document.getElementById('selectedFilesList').innerHTML = '';
+            document.getElementById('formAlert').classList.add('hidden');
+            updateFileRequirement();
+            stopConfetti();
+            backToGame();
+        }
+
+        /* =========================================================================
+           4. VALIDASI EKSTENSI FILE (KELAS 7-1..7-6: HTML / HTML+CSS | 8 & 9: .AIA)
+           ========================================================================= */
+        function updateFileRequirement() {
+            const grade = document.getElementById('studentGrade').value;
+            const reqText = document.getElementById('requirementText');
+            const fileInput = document.getElementById('projectFiles');
+            const hint = document.getElementById('fileFormatHint');
+
+            if (grade.startsWith('7-')) {
+                reqText.innerHTML = `✅ <b>KELAS ${grade}:</b> Boleh mengumpulkan file <b>.HTML saja</b> (CSS internal) atau <b>.HTML dan .CSS</b> (CSS eksternal).`;
+                fileInput.setAttribute('accept', '.html,.htm,.css');
+                hint.textContent = `Format diterima untuk Kelas ${grade}: .html saja atau .html + .css`;
+            } else if (grade.startsWith('8-') || grade.startsWith('9-')) {
+                reqText.innerHTML = `✅ <b>KELAS ${grade}:</b> Wajib mengumpulkan file project MIT App Inventor dengan ekstensi <b>.AIA</b>.`;
+                fileInput.setAttribute('accept', '.aia');
+                hint.textContent = `Format diterima untuk Kelas ${grade}: .aia`;
+            } else {
+                reqText.textContent = 'Silakan pilih kelas (7-1 s/d 9-6) terlebih dahulu untuk melihat ketentuan file.';
+                fileInput.removeAttribute('accept');
+                hint.textContent = 'Pilih kelas terlebih dahulu (Kelas 7: .html atau .html + .css | Kelas 8 & 9: .aia)';
+            }
+        }
+
+        function handleFileSelection(input) {
+            const listEl = document.getElementById('selectedFilesList');
+            listEl.innerHTML = '';
+            const files = Array.from(input.files);
+
+            files.forEach(file => {
+                const sizeKB = (file.size / 1024).toFixed(1);
+                const badge = document.createElement('div');
+                badge.className = 'flex items-center justify-between bg-[#29366f] text-white px-3 py-1.5 border-2 border-[#1a1c2c] font-vt text-lg';
+                badge.innerHTML = `
+                    <span>📄 ${file.name}</span>
+                    <span class="text-[#ffcd75]">${sizeKB} KB</span>
+                `;
+                listEl.appendChild(badge);
+            });
+        }
+
+        function showFormError(msg) {
+            const alertBox = document.getElementById('formAlert');
+            document.getElementById('formAlertText').textContent = msg;
+            alertBox.classList.remove('hidden');
+            playTone(160, 0.25, 'sawtooth', 0, 0.12);
+        }
+
+        async function handleProjectSubmit(e) {
+            e.preventDefault();
+            document.getElementById('formAlert').classList.add('hidden');
+
+            const studentName = document.getElementById('studentName').value.trim();
+            const grade = document.getElementById('studentGrade').value;
+            const files = Array.from(document.getElementById('projectFiles').files);
+
+            if (!studentName) {
+                return showFormError('Nama lengkap siswa wajib diisi!');
+            }
+            if (!grade) {
+                return showFormError('Silakan pilih kelas Anda (7-1 sampai 9-6)!');
+            }
+            if (files.length === 0) {
+                return showFormError('Silakan pilih dan unggah file tugas project terlebih dahulu!');
+            }
+
+            // Validasi ekstensi file sesuai aturan tiap jenjang kelas
+            const extensions = files.map(f => f.name.split('.').pop().toLowerCase());
+
+            if (grade.startsWith('7-')) {
+                const hasHtml = extensions.some(ext => ext === 'html' || ext === 'htm');
+                const allValid = extensions.every(ext => ['html', 'htm', 'css'].includes(ext));
+
+                if (!allValid) {
+                    return showFormError(`Kelas ${grade} hanya diperbolehkan mengunggah file berekstensi .html dan/atau .css!`);
+                }
+                if (!hasHtml) {
+                    return showFormError(`Untuk Kelas ${grade}, wajib menyertakan minimal file .html!`);
+                }
+            } else if (grade.startsWith('8-') || grade.startsWith('9-')) {
+                const allAia = extensions.every(ext => ext === 'aia');
+                if (!allAia) {
+                    return showFormError(`Untuk Kelas ${grade}, file project wajib menggunakan ekstensi .aia (MIT App Inventor)!`);
+                }
+            }
+
+            // Simpan Data ke Rekap Spreadsheet (LocalStorage)
+            const nowStr = new Date().toLocaleString('id-ID', {
+                dateStyle: 'medium',
+                timeStyle: 'short'
+            });
+            const fileNamesStr = files.map(f => f.name).join(', ');
+
+            const record = {
+                id: Date.now(),
+                timestamp: nowStr,
+                studentName: studentName,
+                grade: grade,
+                fileNames: fileNamesStr,
+                status: 'Terkumpul ✓'
+            };
+
+            saveRecordToStorage(record);
+
+            // Kirim langsung ke Google Spreadsheet jika URL terpasang
+            const gasUrl = getActiveGasUrl();
+            const submitBtn = document.getElementById('btnSubmitProject');
+            if (gasUrl) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>⏳</span><span>MENGIRIM KE SPREADSHEET...</span>';
+                await sendToGoogleSheets(gasUrl, record, files);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>🚀</span><span>KUMPULKAN TUGAS SEKARANG!</span>';
+            }
+
+            // Tampilkan Halaman Kemenangan / Selamat yang Heboh!
+            showCelebrationPage(record);
+        }
+
+        /* =========================================================================
+           5. HALAMAN PERAYAAN HEBOH & ANIMASI CONFETTI 8-BIT
+           ========================================================================= */
+        let confettiAnimationId = null;
+        let particles = [];
+
+        function showCelebrationPage(record) {
+            currentStage = 'celebration';
+            document.getElementById('stageGame').classList.add('hidden');
+            document.getElementById('stageForm').classList.add('hidden');
+            document.getElementById('stageCelebration').classList.remove('hidden');
+
+            // Isi data bukti pengumpulan
+            document.getElementById('receiptName').textContent = record.studentName;
+            document.getElementById('receiptGrade').textContent = record.grade;
+            document.getElementById('receiptFiles').textContent = record.fileNames;
+            document.getElementById('receiptTime').textContent = record.timestamp;
+
+            // Mainkan musik kemenangan & luncurkan confetti 8-bit
+            replayFanfare();
+            startConfetti();
+        }
+
+        function startConfetti() {
+            const cCanvas = document.getElementById('confettiCanvas');
+            const cCtx = cCanvas.getContext('2d');
+            cCanvas.width = window.innerWidth;
+            cCanvas.height = window.innerHeight;
+
+            const colors = ['#ff004d', '#ffcd75', '#38b764', '#41a6f6', '#a7f070', '#ffffff', '#ef7d57'];
+            particles = [];
+
+            for (let i = 0; i < 140; i++) {
+                particles.push({
+                    x: Math.random() * cCanvas.width,
+                    y: Math.random() * cCanvas.height - cCanvas.height,
+                    size: Math.floor(Math.random() * 8) + 6,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speedY: Math.random() * 4 + 2.5,
+                    speedX: (Math.random() - 0.5) * 4,
+                    rot: Math.random() * 360
+                });
+            }
+
+            function animateConfetti() {
+                cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+                particles.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += Math.sin(p.y * 0.03) * 1.5 + p.speedX * 0.3;
+
+                    if (p.y > cCanvas.height) {
+                        p.y = -15;
+                        p.x = Math.random() * cCanvas.width;
+                    }
+
+                    cCtx.fillStyle = p.color;
+                    cCtx.fillRect(Math.floor(p.x), Math.floor(p.y), p.size, p.size);
+                });
+                confettiAnimationId = requestAnimationFrame(animateConfetti);
+            }
+
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+            animateConfetti();
+        }
+
+        function stopConfetti() {
+            if (confettiAnimationId) {
+                cancelAnimationFrame(confettiAnimationId);
+                confettiAnimationId = null;
+            }
+        }
+
+        /* =========================================================================
+           6. PENYIMPANAN SPREADSHEET, EXPORT CSV & INTEGRASI GOOGLE SHEETS
+           ========================================================================= */
+        const STORAGE_KEY = 'smp_8bit_project_submissions_v1';
+        // OPSIONAL: Tempel URL Web App Google Apps Script di dalam tanda kutip di bawah ini
+        // jika Anda ingin URL langsung tertanam permanen saat di-hosting di GitHub Pages:
+        const DEFAULT_GAS_URL = '';
+
+        function getActiveGasUrl() {
+            return (localStorage.getItem('smp_project_gas_url') || DEFAULT_GAS_URL || '').trim();
+        }
+
+        function getRecords() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveRecordToStorage(record) {
+            const list = getRecords();
+            list.unshift(record);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            updateBadgeCount();
+        }
+
+        function updateBadgeCount() {
+            const count = getRecords().length;
+            document.getElementById('badgeCount').textContent = count;
+        }
+
+        async function showSpreadsheetContent() {
+            renderSpreadsheetTable();
+            const gasUrl = getActiveGasUrl();
+            const badge = document.getElementById('syncStatusBadge');
+            document.getElementById('spreadsheetModal').classList.remove('hidden');
+
+            if (gasUrl) {
+                badge.textContent = '⏳ Mengambil data dari Google Sheets...';
+                badge.className = 'font-vt text-lg px-2.5 py-1 bg-[#1a1c2c] text-[#ffcd75] border-2 border-[#1a1c2c]';
+                await syncFromGoogleSheets();
+            } else {
+                badge.textContent = 'Mode Lokal (Pasang URL di ⚙️ untuk Live Sheets)';
+                badge.className = 'font-vt text-lg px-2.5 py-1 bg-[#1a1c2c] text-[#a7f070] border-2 border-[#1a1c2c]';
+            }
+        }
+
+        async function syncFromGoogleSheets() {
+            const gasUrl = getActiveGasUrl();
+            const badge = document.getElementById('syncStatusBadge');
+            if (!gasUrl) {
+                showCustomNotice('URL Google Sheets belum diatur di menu ⚙️!');
+                return;
+            }
+            try {
+                badge.textContent = '⏳ Menyinkronkan dengan Google Sheets...';
+                const res = await fetch(gasUrl);
+                const json = await res.json();
+                if (json && json.status === 'success' && Array.isArray(json.records)) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(json.records));
+                    updateBadgeCount();
+                    renderSpreadsheetTable();
+                    badge.textContent = `✅ Terhubung Google Sheets (${json.records.length} data)`;
+                    badge.className = 'font-vt text-lg px-2.5 py-1 bg-[#1a1c2c] text-[#a7f070] border-2 border-[#1a1c2c]';
+                }
+            } catch (err) {
+                badge.textContent = '⚠️ Menampilkan data lokal (Cek izin akses Web App)';
+                badge.className = 'font-vt text-lg px-2.5 py-1 bg-[#1a1c2c] text-[#ef7d57] border-2 border-[#1a1c2c]';
+            }
+        }
+
+        function openSpreadsheetModal() {
+            requestAdminPassword('spreadsheet');
+        }
+
+        function closeSpreadsheetModal() {
+            document.getElementById('spreadsheetModal').classList.add('hidden');
+        }
+
+        function renderSpreadsheetTable() {
+            const tbody = document.getElementById('spreadsheetTableBody');
+            const records = getRecords();
+
+            if (records.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-6 text-center text-[#566c86] font-vt text-2xl">
+                            Belum ada siswa yang mengumpulkan tugas. Arahkan karakter siswa ke pintu gedung untuk mulai mengumpulkan!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = records.map((r, idx) => `
+                <tr class="${idx % 2 === 0 ? 'bg-white' : 'bg-[#f1f5f9]'} hover:bg-[#fffbe6]">
+                    <td class="p-2 border-2 border-[#1a1c2c] font-bold">${records.length - idx}</td>
+                    <td class="p-2 border-2 border-[#1a1c2c]">${r.timestamp}</td>
+                    <td class="p-2 border-2 border-[#1a1c2c] font-bold text-[#29366f]">${escapeHtml(r.studentName)}</td>
+                    <td class="p-2 border-2 border-[#1a1c2c]">${escapeHtml(r.grade)}</td>
+                    <td class="p-2 border-2 border-[#1a1c2c] text-[#b13e53] font-bold">
+                        ${r.fileUrl ? `<a href="${escapeHtml(r.fileUrl)}" target="_blank" class="underline text-[#29366f] hover:text-[#ff004d]">${escapeHtml(r.fileNames)} ↗</a>` : escapeHtml(r.fileNames)}
+                    </td>
+                    <td class="p-2 border-2 border-[#1a1c2c] text-[#257179] font-bold">${r.status}</td>
+                </tr>
+            `).join('');
+        }
+
+        function exportToCSV() {
+            const records = getRecords();
+            if (records.length === 0) {
+                showCustomNotice('Belum ada data tugas untuk diunduh ke Spreadsheet!');
+                return;
+            }
+
+            // Header CSV dengan BOM UTF-8 agar rapi saat dibuka di Microsoft Excel & Google Sheets
+            const headers = ['No', 'Waktu Pengumpulan', 'Nama Lengkap Siswa', 'Kelas', 'Nama File Project', 'Status'];
+            const rows = records.map((r, idx) => [
+                records.length - idx,
+                `"${r.timestamp}"`,
+                `"${r.studentName.replace(/"/g, '""')}"`,
+                `"${r.grade.replace(/"/g, '""')}"`,
+                `"${r.fileNames.replace(/"/g, '""')}"`,
+                `"${r.status}"`
+            ]);
+
+            const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            const dateTag = new Date().toISOString().slice(0, 10);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `Rekap_Final_Project_Canicomp_${dateTag}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function clearAllRecords() {
+            localStorage.removeItem(STORAGE_KEY);
+            updateBadgeCount();
+            renderSpreadsheetTable();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /* =========================================================================
+           7. PENGATURAN GURU & REKAP DENGAN PROTEKSI PASSWORD ("finalexam")
+           ========================================================================= */
+        let pendingProtectedAction = null;
+
+        function requestAdminPassword(targetAction) {
+            pendingProtectedAction = targetAction;
+            const promptText = document.getElementById('passwordPromptText');
+            const submitBtn = document.getElementById('passwordSubmitBtn');
+
+            if (targetAction === 'spreadsheet') {
+                promptText.textContent = 'Masukkan password pembina untuk membuka Rekap Spreadsheet:';
+                submitBtn.textContent = 'BUKA REKAP';
+            } else {
+                promptText.textContent = 'Masukkan password pembina untuk membuka Pengaturan:';
+                submitBtn.textContent = 'BUKA SETTING';
+            }
+
+            document.getElementById('teacherPasswordInput').value = '';
+            document.getElementById('passwordError').classList.add('hidden');
+            document.getElementById('passwordModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('teacherPasswordInput').focus(), 50);
+        }
+
+        function openTeacherModal() {
+            requestAdminPassword('teacher');
+        }
+
+        function closePasswordModal() {
+            pendingProtectedAction = null;
+            document.getElementById('passwordModal').classList.add('hidden');
+        }
+
+        function verifyTeacherPassword(e) {
+            e.preventDefault();
+            const inputPwd = document.getElementById('teacherPasswordInput').value;
+            if (inputPwd === 'finalexam') {
+                const action = pendingProtectedAction;
+                playDoorSound();
+                closePasswordModal();
+                if (action === 'spreadsheet') {
+                    showSpreadsheetContent();
+                } else {
+                    document.getElementById('gasUrlInput').value = getActiveGasUrl();
+                    document.getElementById('teacherModal').classList.remove('hidden');
+                }
+            } else {
+                playTone(150, 0.25, 'sawtooth', 0, 0.12);
+                document.getElementById('passwordError').classList.remove('hidden');
+                document.getElementById('teacherPasswordInput').value = '';
+                document.getElementById('teacherPasswordInput').focus();
+            }
+        }
+
+        function closeTeacherModal() {
+            document.getElementById('teacherModal').classList.add('hidden');
+        }
+
+        async function saveGasUrl() {
+            const url = document.getElementById('gasUrlInput').value.trim();
+            if (url) {
+                localStorage.setItem('smp_project_gas_url', url);
+                showTeacherToast('⏳ Menguji koneksi ke Google Spreadsheet...');
+                try {
+                    const res = await fetch(url);
+                    const json = await res.json();
+                    if (json && json.status === 'success') {
+                        showTeacherToast('✅ BERHASIL TERHUBUNG! Google Spreadsheet siap menerima tugas siswa.');
+                    } else {
+                        showTeacherToast('✅ URL disimpan! Pastikan akses Web App diatur ke "Anyone".');
+                    }
+                } catch (e) {
+                    showTeacherToast('✅ URL disimpan! (Pastikan Deploy Apps Script memakai akses "Anyone").');
+                }
+            } else {
+                localStorage.removeItem('smp_project_gas_url');
+                showTeacherToast('ℹ️ URL dihapus, menggunakan mode Spreadsheet lokal.');
+            }
+        }
+
+        function copyGasScript() {
+            const code = document.getElementById('gasCodeBlock').textContent;
+            const temp = document.createElement('textarea');
+            temp.value = code;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showTeacherToast('📋 Kode Google Apps Script berhasil disalin ke clipboard!');
+        }
+
+        function downloadHtmlFile() {
+            const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showTeacherToast('⬇️ File index.html berhasil diunduh! Siap di-upload ke GitHub.');
+        }
+
+        function showTeacherToast(msg) {
+            const toast = document.getElementById('teacherToast');
+            toast.textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        async function sendToGoogleSheets(gasUrl, record, files) {
+            try {
+                const encodedFiles = await Promise.all(files.map(file => {
+                    return new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            const base64 = reader.result.split(',')[1];
+                            resolve({ name: file.name, type: file.type || 'application/octet-stream', base64 });
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }));
+
+                await fetch(gasUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        studentName: record.studentName,
+                        grade: record.grade,
+                        fileNames: record.fileNames,
+                        files: encodedFiles
+                    })
+                });
+            } catch (err) {
+                console.warn('Pengiriman ke Google Sheets gagal, data tetap aman di lokal:', err);
+            }
+        }
+
+        function showCustomNotice(text) {
+            const banner = document.createElement('div');
+            banner.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pixel-box-gold px-4 py-2.5 font-pixel text-xs text-[#1a1c2c] shadow-xl';
+            banner.textContent = text;
+            document.body.appendChild(banner);
+            setTimeout(() => banner.remove(), 3000);
+        }
+
+        /* =========================================================================
+           8. INISIALISASI SAAT HALAMAN DIMUAT
+           ========================================================================= */
+        window.onload = function() {
+            resizeCanvas();
+            updateBadgeCount();
+            gameLoop();
+        };
+    </script>
+</body>
+</html>
